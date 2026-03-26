@@ -23,6 +23,10 @@ app.use("/api/payments", paymentRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/coupons", couponRoutes);
 
+const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
+app.use(notFound);
+app.use(errorHandler);
+
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../../client/build")));
 
