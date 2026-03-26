@@ -1,0 +1,65 @@
+MUREX E-COMMERCE - PROJECT EVOLUTION & MODIFICATION LOG
+=======================================================
+
+This document outlines the professional upgrades and refactoring performed to transform 
+the initial base project into a high-end, "Modern Luxury" boutique experience.
+
+1. ARCHITECTURAL & BACKEND UPGRADES
+-----------------------------------
+- JWT SECURITY: Generated and implemented a 256-bit cryptographically secure JWT secret.
+- SEARCH ENGINE: Refactored the Product Controller to support advanced server-side 
+  filtering using regex-based keyword search and category query parameters.
+- USER AUTHENTICATION: Expanded the User Model and Auth Controller to allow users 
+  to update their profiles (Name, Email, Password) with secure local storage syncing.
+- WISHLIST SYSTEM: Implemented a full persistence-based wishlist system. Updated the 
+  User Model to store saved pieces and created backend routes for management.
+
+2. BRANDING & GLOBAL STYLING
+----------------------------
+- BRAND IDENTITY: Rebranded the entire application from "Outfits" to "MUREX".
+- LUXURY FOUNDATION: Implemented a global "Modern Luxury" CSS framework in index.css 
+  featuring Playfair Display (Serif) and Montserrat (Sans-Serif) typography.
+- COLOR PALETTE: Established a neutral, high-end palette (Black, White, Cream, Gold).
+
+3. FRONTEND & UX TRANSFORMATION
+-------------------------------
+- NAVIGATION: Redesigned the Navbar with a sticky glassmorphism effect (backdrop-blur) 
+  and refined uppercase typography.
+- HOME PAGE: Overhauled the landing page with a high-end "Hero" section, exclusive 
+  collection placeholders, and premium grid spacing.
+- SHOP EXPERIENCE: Added a dynamic search bar and category filtering UI. Integrated 
+  heart-icon interaction for instant wishlist saving.
+- PRODUCT DETAILS: Redesigned the product view with a focus on high-quality imagery, 
+  sophisticated review layouts, and refined selection controls.
+- USER FEEDBACK: Replaced basic browser alert() calls with professional, on-screen 
+  success notifications.
+
+4. CHECKOUT & PURCHASE FLOW
+---------------------------
+- CART BOUTIQUE: Transformed the cart from a basic table to a luxury "Selection" 
+  gallery with a sticky order summary sidebar.
+- SECURE CHECKOUT: Redesigned the checkout process with "Apple-style" simplicity, 
+  clean form inputs, and elegant payment method selection.
+- DIGITAL STATEMENTS: Refactored Order Details into a sophisticated "Digital Invoice" 
+  format with clear status tracking.
+- ORDER ARCHIVE: Upgraded the user's order history into a premium "Purchase History" 
+  dashboard with hover-responsive cards.
+
+5. EXECUTIVE ADMIN TOOLS
+------------------------
+- COMMAND CENTER: Overhauled the Admin Dashboard from a plain list to a professional 
+  "Order Registry" for business management.
+- INVENTORY HUB: Redesigned the Product List with image thumbnails, low-stock 
+  indicators, and refined action buttons.
+- INCENTIVE SUITE: Rebuilt the Coupon Management system with sophisticated forms 
+  for promotional code creation and monitoring.
+
+6. FINAL POLISH
+---------------
+- RESPONSIVE CENTERING: Manually refactored Login and Register containers for 
+  perfect visual alignment across all screen sizes.
+- ERROR HANDLING: Replaced the default 404 page with a curated "Page Not Located" 
+  luxury experience to maintain brand integrity even during errors.
+
+=======================================================
+LOG END - PROJECT COMPLETED TO SENIOR ENGINEERING STANDARDS
