@@ -13,7 +13,7 @@ const makeAdmin = async (email) => {
       process.exit(1);
     }
 
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGO_URI.trim());
     console.log("Connected to Database...");
 
     const user = await User.findOne({ email });
