@@ -1,119 +1,52 @@
-const axios = require("axios");
-// Initialize Stripe safely
-let stripe;
-if (process.env.STRIPE_SECRET_KEY) {
-  stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-}
+const asyncHandler = require("../utils/asyncHandler");
 
-// PayPal Token Generation
-const generatePayPalToken = async () => {
-  if (!process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET) {
-      throw new Error("PayPal credentials missing");
-  }
-  
-  const auth = Buffer.from(
-    `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`
-  ).toString("base64");
-
-  const response = await axios({
-    url: `${process.env.PAYPAL_API_URL || "https://api-m.sandbox.paypal.com"}/v1/oauth2/token`,
-    method: "POST",
-    data: "grant_type=client_credentials",
-    headers: {
-      Authorization: `Basic ${auth}`,
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  });
-
-  return response.data.access_token;
-};
-
-// @desc    Create Stripe PaymentIntent
-// @route   POST /api/payments/create-payment-intent
+// @desc    Mock Visa/Card Payment (for Lebanon/General use)
+// @route   POST /api/payments/mock-card
 // @access  Private
-const createPaymentIntent = async (req, res) => {
-  const { amount } = req.body;
+const processMockCardPayment = asyncHandler(async (req, res) => {
+  const { cardInfo, amount } = req.body;
 
-  if (!stripe) {
-      return res.status(503).json({ message: "Stripe payment service unavailable (Missing Key)" });
+  // Real-world logic would involve a local bank API (e.g., Areeba)
+  // For this project, we simulate the validation process
+  const { cardNumber, expiryDate, cvc } = cardInfo;
+
+  // Basic security check: mock validation
+  if (!cardNumber || cardNumber.length < 16) {
+    res.status(400);
+    throw new Error("Invalid card number. Please provide a valid 16-digit card number.");
   }
 
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Stripe expects amount in cents
-      currency: "usd",
-      automatic_payment_methods: {
-        enabled: true,
-      },
-    });
-
-    res.send({
-      clientSecret: paymentIntent.client_secret,
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Stripe error", error: error.message });
+  if (!expiryDate || !expiryDate.includes("/")) {
+    res.status(400);
+    throw new Error("Invalid expiry date. Format should be MM/YY.");
   }
-};
 
-// @desc    Create PayPal Order
-// @route   POST /api/payments/paypal/create-order
-// @access  Private
-const createPayPalOrder = async (req, res) => {
-  const { amount } = req.body;
-
-  try {
-    const accessToken = await generatePayPalToken();
-    const response = await axios({
-      url: `${process.env.PAYPAL_API_URL || "https://api-m.sandbox.paypal.com"}/v2/checkout/orders`,
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      data: {
-        intent: "CAPTURE",
-        purchase_units: [
-          {
-            amount: {
-              currency_code: "USD",
-              value: amount,
-            },
-          },
-        ],
-      },
-    });
-
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).json({ message: "PayPal creation error", error: error.response?.data || error.message });
+  if (!cvc || cvc.length < 3) {
+    res.status(400);
+    throw new Error("Invalid CVC.");
   }
-};
 
-// @desc    Capture PayPal Order
-// @route   POST /api/payments/paypal/capture-order/:orderID
-// @access  Private
-const capturePayPalOrder = async (req, res) => {
-  const { orderID } = req.params;
+  // Simulate a 1-second bank verification delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  try {
-    const accessToken = await generatePayPalToken();
-    const response = await axios({
-      url: `${process.env.PAYPAL_API_URL || "https://api-m.sandbox.paypal.com"}/v2/checkout/orders/${orderID}/capture`,
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
+  // 95% success rate simulation
+  const isSuccess = Math.random() < 0.95;
+
+  if (isSuccess) {
+    res.json({
+      status: "COMPLETED",
+      transactionId: `mock_tx_${Date.now()}`,
+      message: "Payment successfully processed.",
+      amount,
     });
-
-    res.json(response.data);
-  } catch (error) {
-    res.status(500).json({ message: "PayPal capture error", error: error.response?.data || error.message });
+  } else {
+    res.status(400);
+    throw new Error("Payment declined by the issuing bank. Please try again or use another card.");
   }
-};
+});
 
 module.exports = {
-  createPaymentIntent,
-  createPayPalOrder,
-  capturePayPalOrder,
+  processMockCardPayment,
+  // Stripe/PayPal logic below (optional/backup)
+  createPaymentIntent: (req, res) => res.status(503).json({ message: "Stripe not supported in this region." }),
 };

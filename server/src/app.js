@@ -10,6 +10,42 @@ const couponRoutes = require("./routes/couponRoutes");
 
 const app = express();
 
+// Security Middlewares
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+
+app.use(helmet()); // Set security HTTP headers
+
+// Data sanitization against NoSQL query injection (Express 5 compatible)
+const sanitize = (obj) => {
+  if (obj instanceof Object) {
+    for (let key in obj) {
+      if (key.startsWith("$") || key.includes(".")) {
+        delete obj[key];
+      } else {
+        sanitize(obj[key]);
+      }
+    }
+  }
+  return obj;
+};
+
+app.use((req, res, next) => {
+  req.body = sanitize(req.body || {});
+  req.params = sanitize(req.params || {});
+  // Note: in Express 5 req.query is a getter/setter, we sanitize its contents instead of replacing it
+  sanitize(req.query || {});
+  next();
+});
+
+// Limit requests from same API
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: "Too many requests from this IP, please try again in an hour!",
+});
+app.use("/api", limiter);
+
 app.use(cors());
 app.use(express.json());
 
