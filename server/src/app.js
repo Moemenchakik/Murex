@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
 const orderRoutes = require("./routes/orderRoutes");
-const paymentRoutes = require("./routes/paymentRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const couponRoutes = require("./routes/couponRoutes");
 
@@ -68,7 +67,6 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/orders", orderRoutes);
-app.use("/api/payments", paymentRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/coupons", couponRoutes);
 
@@ -83,13 +81,15 @@ app.use((err, req, res, next) => {
 
 app.use(errorHandler);
 
-if (process.env.NODE_ENV === "production") {
+// Serving client build - only for non-Vercel environments (like Heroku or traditional VPS)
+if (process.env.NODE_ENV === "production" && !process.env.VERCEL) {
   app.use(express.static(path.join(__dirname, "../../client/build")));
 
   app.get("*", (req, res) =>
     res.sendFile(path.resolve(__dirname, "../../client", "build", "index.html"))
   );
 } else {
+  // Simple health check or API base for Vercel/Other
   app.get("/", (req, res) => {
     res.send("API running...");
   });

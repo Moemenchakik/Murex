@@ -21,17 +21,11 @@ function Checkout() {
     phone: "",
   });
 
-  const [paymentMethod, setPaymentMethod] = useState("Card");
-  const [cardInfo, setCardInfo] = useState({
-    cardNumber: "",
-    expiryDate: "",
-    cvc: "",
-  });
+  const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
 
   const [couponInput, setCouponInput] = useState("");
   const [couponError, setCouponError] = useState("");
   const [paymentError, setPaymentError] = useState("");
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   useEffect(() => {
     if (!user) navigate("/login");
@@ -51,21 +45,6 @@ function Checkout() {
     const { name, value } = e.target;
     setShippingInfo({ ...shippingInfo, [name]: value });
     if (isError) dispatch(resetOrder());
-  };
-
-  const handleCardChange = (e) => {
-    const { name, value } = e.target;
-    // Basic formatting for card number
-    if (name === "cardNumber") {
-      const formattedValue = value.replace(/\D/g, '').substring(0, 16);
-      setCardInfo({ ...cardInfo, [name]: formattedValue });
-    } else if (name === "expiryDate") {
-      const formattedValue = value.replace(/[^\d/]/g, '').substring(0, 5);
-      setCardInfo({ ...cardInfo, [name]: formattedValue });
-    } else if (name === "cvc") {
-      const formattedValue = value.replace(/\D/g, '').substring(0, 4);
-      setCardInfo({ ...cardInfo, [name]: formattedValue });
-    }
   };
 
   const handleApplyCoupon = async () => {
@@ -93,32 +72,10 @@ function Checkout() {
     e.preventDefault();
     setPaymentError("");
     
-    let paymentResult = null;
-
-    if (paymentMethod === "Card") {
-      setIsProcessingPayment(true);
-      try {
-        const { data } = await api.post("/payments/mock-card", {
-          cardInfo,
-          amount: finalAmount,
-        });
-        paymentResult = {
-          id: data.transactionId,
-          status: data.status,
-          update_time: new Date().toISOString(),
-        };
-      } catch (err) {
-        setPaymentError(err.response?.data?.message || "Payment processing failed. Please check your card details.");
-        setIsProcessingPayment(false);
-        return;
-      }
-      setIsProcessingPayment(false);
-    }
-
     dispatch(createOrder({
       orderItems: cartItems.map(item => ({
         ...item,
-        productId: item.productId // Ensure it's passed correctly
+        productId: item.productId
       })),
       shippingAddress: shippingInfo,
       paymentMethod: paymentMethod,
@@ -127,7 +84,7 @@ function Checkout() {
       taxPrice: 0,
       totalPrice: finalAmount,
       coupon: coupon ? { code: coupon.code, discountAmount: discountAmount } : null,
-      paymentResult: paymentResult,
+      paymentResult: null,
     }));
   };
 
@@ -196,53 +153,14 @@ function Checkout() {
                   alignItems: "center", 
                   gap: "1rem", 
                   padding: "1.5rem", 
-                  background: paymentMethod === "Card" ? "var(--color-cream)" : "#fff",
-                  border: `1px solid ${paymentMethod === "Card" ? "var(--color-gold)" : "#eee"}`,
+                  background: "var(--color-cream)",
+                  border: "1px solid var(--color-gold)",
                   cursor: "pointer"
                 }}>
-                  <input type="radio" name="payment" value="Card" checked={paymentMethod === "Card"} onChange={(e) => setPaymentMethod(e.target.value)} />
-                  <div style={{ flex: 1 }}>
-                    <span style={{ display: "block", fontWeight: "600", fontSize: "0.9rem" }}>Visa / Mastercard</span>
-                    <span style={{ fontSize: "0.75rem", color: "var(--color-grey-medium)" }}>Secure simulated transaction (Mock)</span>
-                  </div>
-                  <div style={{ display: "flex", gap: "0.5rem" }}>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" style={{ height: "15px" }} />
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="MC" style={{ height: "15px" }} />
-                  </div>
-                </label>
-
-                {paymentMethod === "Card" && (
-                  <div style={{ padding: "1.5rem", background: "#fcfcfc", border: "1px solid #eee", marginTop: "-1rem", display: "flex", flexDirection: "column", gap: "1.2rem" }}>
-                    <div>
-                      <label style={{ display: "block", fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.4rem" }}>Card Number</label>
-                      <input type="text" name="cardNumber" placeholder="0000 0000 0000 0000" required={paymentMethod === "Card"} value={cardInfo.cardNumber} onChange={handleCardChange} style={{ width: "100%", padding: "0.8rem", border: "1px solid #eee", outline: "none" }} />
-                    </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
-                      <div>
-                        <label style={{ display: "block", fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.4rem" }}>Expiry Date</label>
-                        <input type="text" name="expiryDate" placeholder="MM/YY" required={paymentMethod === "Card"} value={cardInfo.expiryDate} onChange={handleCardChange} style={{ width: "100%", padding: "0.8rem", border: "1px solid #eee", outline: "none" }} />
-                      </div>
-                      <div>
-                        <label style={{ display: "block", fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.4rem" }}>CVC</label>
-                        <input type="text" name="cvc" placeholder="123" required={paymentMethod === "Card"} value={cardInfo.cvc} onChange={handleCardChange} style={{ width: "100%", padding: "0.8rem", border: "1px solid #eee", outline: "none" }} />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <label style={{ 
-                  display: "flex", 
-                  alignItems: "center", 
-                  gap: "1rem", 
-                  padding: "1.5rem", 
-                  background: paymentMethod === "Cash on Delivery" ? "var(--color-cream)" : "#fff",
-                  border: `1px solid ${paymentMethod === "Cash on Delivery" ? "var(--color-gold)" : "#eee"}`,
-                  cursor: "pointer"
-                }}>
-                  <input type="radio" name="payment" value="Cash on Delivery" checked={paymentMethod === "Cash on Delivery"} onChange={(e) => setPaymentMethod(e.target.value)} />
+                  <input type="radio" name="payment" value="Cash on Delivery" checked={true} readOnly />
                   <div>
-                    <span style={{ display: "block", fontWeight: "600", fontSize: "0.9rem" }}>Cash on Delivery</span>
-                    <span style={{ fontSize: "0.75rem", color: "var(--color-grey-medium)" }}>Pay when your luxury pieces arrive.</span>
+                    <span style={{ display: "block", fontWeight: "600", fontSize: "0.9rem" }}>Cash on Delivery / Bank Transfer</span>
+                    <span style={{ fontSize: "0.75rem", color: "var(--color-grey-medium)" }}>Pay when your luxury pieces arrive or via Whish Money.</span>
                   </div>
                 </label>
               </div>
@@ -251,10 +169,10 @@ function Checkout() {
             <button 
               type="submit" 
               className="btn-luxury" 
-              disabled={orderLoading || isProcessingPayment}
-              style={{ width: "100%", padding: "1.5rem", opacity: (orderLoading || isProcessingPayment) ? 0.7 : 1, cursor: (orderLoading || isProcessingPayment) ? "not-allowed" : "pointer" }}
+              disabled={orderLoading}
+              style={{ width: "100%", padding: "1.5rem", opacity: orderLoading ? 0.7 : 1, cursor: orderLoading ? "not-allowed" : "pointer" }}
             >
-              {isProcessingPayment ? "Verifying Card..." : orderLoading ? "Processing Order..." : "Complete Order"}
+              {orderLoading ? "Processing Order..." : "Complete Order"}
             </button>
           </form>
         </div>

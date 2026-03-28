@@ -1,76 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getOrderDetails, resetOrder, payOrder, deliverOrder } from "../../features/orders/orderSlice";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { getOrderDetails, resetOrder, deliverOrder } from "../../features/orders/orderSlice";
 import api from "../../services/api/axios";
-
-// Placeholder keys - ensure you update these in your .env for production
-const stripePromise = loadStripe("pk_test_your_publishable_key");
-const PAYPAL_CLIENT_ID = "your_paypal_client_id";
-
-function CheckoutForm({ orderId, amount }) {
-  const stripe = useStripe();
-  const elements = useElements();
-  const dispatch = useDispatch();
-  
-  const [error, setError] = useState(null);
-  const [processing, setProcessing] = useState(false);
-  const [succeeded, setSucceeded] = useState(false);
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setProcessing(true);
-    if (!stripe || !elements) return;
-
-    try {
-      const { data: { clientSecret } } = await api.post("/payments/create-payment-intent", { amount });
-      const payload = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: { card: elements.getElement(CardElement) },
-      });
-
-      if (payload.error) {
-        setError(`Payment failed: ${payload.error.message}`);
-        setProcessing(false);
-      } else {
-        setError(null);
-        setProcessing(false);
-        setSucceeded(true);
-        dispatch(payOrder({
-          orderId,
-          paymentResult: {
-            id: payload.paymentIntent.id,
-            status: payload.paymentIntent.status,
-            update_time: new Date().toISOString(),
-            email_address: payload.paymentIntent.receipt_email || "customer@example.com",
-          }
-        }));
-      }
-    } catch (err) {
-      setError("Payment processing error");
-      setProcessing(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <div style={{ padding: "1rem", border: "1px solid #eee", marginBottom: "1rem" }}>
-        <CardElement options={{ style: { base: { fontSize: "16px", fontFamily: "var(--font-sans)" } } }} />
-      </div>
-      <button disabled={processing || succeeded || !stripe} className="btn-luxury" style={{ width: "100%", padding: "1rem" }}>
-        {processing ? "Authenticating..." : "Authorize Payment"}
-      </button>
-      {error && <div style={{ color: "#d00", marginTop: "1rem", fontSize: "0.8rem" }}>{error}</div>}
-    </form>
-  );
-}
 
 function OrderDetails() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [paymentMethod, setPaymentMethod] = useState("stripe");
   const { order, isLoading, isError, message } = useSelector((state) => state.order);
   const { user } = useSelector((state) => state.auth);
 
@@ -197,27 +133,11 @@ function OrderDetails() {
             {/* Payment Interaction */}
             {!order.isPaid && !user.isAdmin && (
                <div style={{ marginTop: "2rem" }}>
-                 {order.paymentMethod === "Cash on Delivery" ? (
                    <div style={{ padding: "1.5rem", background: "#fff", border: "1px solid var(--color-gold)", fontSize: "0.85rem", lineHeight: "1.6" }}>
-                     <p style={{ fontWeight: "700", marginBottom: "10px", color: "var(--color-gold)" }}>Whish Money / WhatsApp Payment</p>
-                     Please transfer the total amount to our business line. Contact us on WhatsApp with your Order Ref for instant confirmation:
+                     <p style={{ fontWeight: "700", marginBottom: "10px", color: "var(--color-gold)" }}>Settlement Instructions</p>
+                     Please settle the total amount via Whish Money or Cash on Delivery. Contact us on WhatsApp with your Order Ref for instant confirmation:
                      <p style={{ fontWeight: "700", marginTop: "10px", fontSize: "1rem" }}>+961 XX XXX XXX</p>
                    </div>
-                 ) : (
-                   <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-                     <div style={{ display: "flex", gap: "1rem" }}>
-                        <button onClick={() => setPaymentMethod("stripe")} style={{ flex: 1, padding: "0.5rem", borderBottom: paymentMethod === "stripe" ? "2px solid #000" : "none", fontWeight: paymentMethod === "stripe" ? "700" : "400" }}>Stripe</button>
-                        <button onClick={() => setPaymentMethod("paypal")} style={{ flex: 1, padding: "0.5rem", borderBottom: paymentMethod === "paypal" ? "2px solid #000" : "none", fontWeight: paymentMethod === "paypal" ? "700" : "400" }}>PayPal</button>
-                     </div>
-                     {paymentMethod === "stripe" ? (
-                       <Elements stripe={stripePromise}><CheckoutForm orderId={order._id} amount={order.totalPrice} /></Elements>
-                     ) : (
-                       <PayPalScriptProvider options={{ "client-id": PAYPAL_CLIENT_ID }}>
-                         <PayPalButtons style={{ layout: "vertical" }} />
-                       </PayPalScriptProvider>
-                     )}
-                   </div>
-                 )}
                </div>
             )}
           </div>
