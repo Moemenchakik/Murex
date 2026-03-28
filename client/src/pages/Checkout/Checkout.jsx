@@ -65,7 +65,7 @@ function Checkout() {
 
   const getImagePath = (image) => {
     if (!image) return "https://via.placeholder.com/200";
-    if (image.startsWith("http")) return image;
+    if (image.startsWith("http") || image.startsWith("data:")) return image;
     return image.startsWith("/") ? image : `/${image}`;
   };
 

@@ -1,28 +1,16 @@
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
 const { protect, admin } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
-  destination(req, file, cb) {
-    cb(null, path.join(__dirname, "../../uploads"));
-  },
-  filename(req, file, cb) {
-    cb(
-      null,
-      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
-    );
-  },
-});
+const storage = multer.memoryStorage();
 
 function checkFileType(file, cb) {
   const filetypes = /jpg|jpeg|png|webp|svg/;
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = filetypes.test(file.mimetype);
 
-  if (extname && mimetype) {
+  if (mimetype) {
     return cb(null, true);
   } else {
     cb("Images only!");
@@ -37,10 +25,17 @@ const upload = multer({
 });
 
 router.post("/", protect, admin, upload.single("image"), (req, res) => {
-  const fileName = path.basename(req.file.path);
+  if (!req.file) {
+    return res.status(400).send({ message: "No file uploaded" });
+  }
+
+  // Convert buffer to base64 data URI
+  const b64 = Buffer.from(req.file.buffer).toString("base64");
+  const dataURI = `data:${req.file.mimetype};base64,${b64}`;
+
   res.send({
-    message: "Image uploaded",
-    image: `/uploads/${fileName}`,
+    message: "Image uploaded and converted to persistent format",
+    image: dataURI,
   });
 });
 
