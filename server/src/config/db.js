@@ -6,11 +6,15 @@ const connectDB = async (retries = 5) => {
     process.exit(1);
   }
 
+  // Log a masked version of the URI for debugging
+  const maskedUri = process.env.MONGO_URI.replace(/:([^@]+)@/, ":****@");
+  console.log(`Attempting to connect to MongoDB: ${maskedUri}`);
+
   while (retries > 0) {
     try {
       const conn = await mongoose.connect(process.env.MONGO_URI.trim());
       console.log(`MongoDB Connected: ${conn.connection.host}`);
-      return;
+      return conn;
     } catch (error) {
       retries -= 1;
       console.error(`MongoDB Connection Error: ${error.message}`);

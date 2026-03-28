@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const mongoose = require("mongoose");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
 const orderRoutes = require("./routes/orderRoutes");
@@ -9,6 +10,8 @@ const uploadRoutes = require("./routes/uploadRoutes");
 const couponRoutes = require("./routes/couponRoutes");
 
 const app = express();
+
+app.set("trust proxy", 1);
 
 // Security Middlewares
 const helmet = require("helmet");
@@ -38,6 +41,16 @@ app.use((req, res, next) => {
   next();
 });
 
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "ok",
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV,
+    db: mongoose.connection.readyState === 1 ? "connected" : "disconnected"
+  });
+});
+
 // Limit requests from same API
 const limiter = rateLimit({
   max: 100,
@@ -61,6 +74,13 @@ app.use("/api/coupons", couponRoutes);
 
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 app.use(notFound);
+
+// Custom error logger
+app.use((err, req, res, next) => {
+  console.error(`Error: ${err.message}`);
+  next(err);
+});
+
 app.use(errorHandler);
 
 if (process.env.NODE_ENV === "production") {

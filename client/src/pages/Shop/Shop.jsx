@@ -33,7 +33,12 @@ function Shop() {
            setCategories(uniqueCategories);
         }
       } catch (err) {
-        setError("Failed to load products");
+        console.error("Product fetch error:", err);
+        const message = 
+          (err.response && err.response.data && err.response.data.message) || 
+          err.message || 
+          "Failed to load products";
+        setError(message);
       } finally {
         setLoading(false);
       }
