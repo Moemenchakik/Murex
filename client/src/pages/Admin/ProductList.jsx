@@ -33,8 +33,9 @@ function ProductList() {
   };
 
   const getImagePath = (image) => {
-    if (!image) return "https://via.placeholder.com/100";
-    return image.startsWith("http") ? image : `${API_BASE_URL}${image}`;
+    if (!image) return "https://via.placeholder.com/200";
+    if (image.startsWith("http")) return image;
+    return image.startsWith("/") ? image : `/${image}`;
   };
 
   if (isLoading) return <div className="container" style={{ padding: "10rem", textAlign: "center" }}><p className="hero-subtitle">Accessing Inventory...</p></div>;

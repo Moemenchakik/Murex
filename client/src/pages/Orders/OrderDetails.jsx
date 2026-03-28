@@ -21,7 +21,8 @@ function OrderDetails() {
 
   const getImagePath = (image) => {
     if (!image) return "https://via.placeholder.com/200";
-    return image.startsWith("http") ? image : `${API_BASE_URL}${image}`;
+    if (image.startsWith("http")) return image;
+    return image.startsWith("/") ? image : `/${image}`;
   };
 
   if (isLoading) return (

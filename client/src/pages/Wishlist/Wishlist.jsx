@@ -23,8 +23,9 @@ function Wishlist() {
   };
 
   const getImagePath = (image) => {
-    if (!image) return "https://via.placeholder.com/400";
-    return image.startsWith("http") ? image : `${API_BASE_URL}${image}`;
+    if (!image) return "https://via.placeholder.com/200";
+    if (image.startsWith("http")) return image;
+    return image.startsWith("/") ? image : `/${image}`;
   };
 
   if (isLoading) return (

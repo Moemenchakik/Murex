@@ -63,8 +63,7 @@ function Shop() {
   const getImagePath = (image) => {
     if (!image) return "https://via.placeholder.com/200";
     if (image.startsWith("http")) return image;
-    const cleanPath = image.startsWith("/") ? image : `/${image}`;
-    return `${API_BASE_URL}${cleanPath}`;
+    return image.startsWith("/") ? image : `/${image}`;
   };
 
   return (
