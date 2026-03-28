@@ -52,7 +52,7 @@ Murex is a full-stack e-commerce application built with the MERN stack (MongoDB,
    Create a `.env` file in the `server` directory and add:
    ```env
    PORT=5000
-   MONGO_URI=your_mongodb_uri
+   MONGO_URI=mongodb+srv://moemenchakik219_db_user:Vo5eF77fShYJomSu@cluster0.xf1eycy.mongodb.net/?appName=Cluster0
    JWT_SECRET=your_secret_key
    ```
 
