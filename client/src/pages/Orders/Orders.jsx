@@ -44,11 +44,10 @@ function Orders() {
           {orders.map((order) => (
             <div 
               key={order._id} 
+              className="orders-row"
               style={{ 
                 border: "1px solid #eee", 
                 padding: "2.5rem", 
-                display: "grid", 
-                gridTemplateColumns: "1.5fr 1fr 1fr 1fr 150px", 
                 alignItems: "center",
                 transition: "var(--transition-smooth)",
                 background: "#fff"
@@ -57,21 +56,20 @@ function Orders() {
               onMouseOut={(e) => e.currentTarget.style.borderColor = "#eee"}
             >
               {/* Order ID & Date */}
-              <div>
-                <span style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.15em", color: "var(--color-grey-medium)" }}>Order Ref</span>
-                <p style={{ fontWeight: "700", fontSize: "0.95rem", margin: "5px 0" }}>#{order._id.substring(order._id.length - 8).toUpperCase()}</p>
-                <p style={{ fontSize: "0.85rem", color: "var(--color-grey-dark)" }}>{new Date(order.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+              <div data-label="Order Ref">
+                <div>
+                  <p style={{ fontWeight: "700", fontSize: "0.95rem", margin: "5px 0" }}>#{order._id.substring(order._id.length - 8).toUpperCase()}</p>
+                  <p style={{ fontSize: "0.85rem", color: "var(--color-grey-dark)" }}>{new Date(order.createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                </div>
               </div>
 
               {/* Amount */}
-              <div style={{ textAlign: "center" }}>
-                <span style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.15em", color: "var(--color-grey-medium)" }}>Investment</span>
+              <div data-label="Investment" style={{ textAlign: "center" }}>
                 <p style={{ fontWeight: "700", fontSize: "1.1rem", marginTop: "5px" }}>${order.totalPrice.toLocaleString()}</p>
               </div>
 
               {/* Payment Status */}
-              <div style={{ textAlign: "center" }}>
-                <span style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.15em", color: "var(--color-grey-medium)" }}>Payment</span>
+              <div data-label="Payment Status" style={{ textAlign: "center" }}>
                 <div style={{ marginTop: "8px" }}>
                   {order.isPaid ? (
                     <span style={{ fontSize: "0.75rem", textTransform: "uppercase", color: "#2e7d32", fontWeight: "700", letterSpacing: "0.05em" }}>Confirmed</span>
@@ -82,8 +80,7 @@ function Orders() {
               </div>
 
               {/* Shipping Status */}
-              <div style={{ textAlign: "center" }}>
-                <span style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.15em", color: "var(--color-grey-medium)" }}>Delivery</span>
+              <div data-label="Delivery" style={{ textAlign: "center" }}>
                 <div style={{ marginTop: "8px" }}>
                   {order.isDelivered ? (
                     <span style={{ fontSize: "0.75rem", textTransform: "uppercase", color: "#2e7d32", fontWeight: "700", letterSpacing: "0.05em" }}>Arrived</span>
@@ -94,7 +91,7 @@ function Orders() {
               </div>
 
               {/* Action */}
-              <div style={{ textAlign: "right" }}>
+              <div data-label="Action" style={{ textAlign: "right" }}>
                 <Link 
                   to={`/orders/${order._id}`}
                   className="btn-outline"

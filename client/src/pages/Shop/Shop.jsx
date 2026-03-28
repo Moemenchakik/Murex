@@ -83,7 +83,7 @@ function Shop() {
       </div>
 
       {/* Search and Filters */}
-      <div style={{ 
+      <div className="shop-filters" style={{ 
         display: "flex", 
         justifyContent: "space-between", 
         alignItems: "center", 
@@ -93,7 +93,7 @@ function Shop() {
       }}>
         <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
           {/* Categories */}
-          <div style={{ display: "flex", gap: "1.5rem" }}>
+          <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap" }}>
             {categories.map(cat => (
               <button
                 key={cat}
@@ -115,7 +115,7 @@ function Shop() {
         </div>
 
         {/* Search */}
-        <div style={{ position: "relative", width: "300px" }}>
+        <div className="shop-search" style={{ position: "relative", width: "300px" }}>
           <input 
             type="text"
             placeholder="Search products..."

@@ -56,9 +56,16 @@ input, select, textarea {
   font-family: var(--font-sans);
 }
 
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
 /* Navbar Luxury Styles */
 .navbar-header {
-  padding: 1.5rem 0;
+  padding: 1rem 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
@@ -75,7 +82,13 @@ input, select, textarea {
 
 .navbar-left, .navbar-right {
   display: flex;
-  gap: 2.5rem;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 1.5rem;
   align-items: center;
 }
 
@@ -211,4 +224,163 @@ input, select, textarea {
 .btn-outline:hover {
   background-color: var(--color-black);
   color: var(--color-white);
+}
+
+/* Desktop Grid Classes */
+.grid-2-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.grid-3-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.admin-product-row {
+  display: grid;
+  grid-template-columns: 80px 1.5fr 1fr 1fr 1fr 120px;
+}
+
+.admin-registry-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr 1fr 1fr 1fr 100px;
+}
+
+.orders-row {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 150px;
+}
+
+.admin-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+/* Tablet Responsiveness */
+@media (max-width: 992px) {
+  .admin-dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .navbar-container {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .navbar-left, .navbar-right {
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .hero {
+    flex-direction: column !important;
+    height: auto !important;
+    padding: 4rem 0;
+  }
+
+  .hero-content {
+    padding-right: 0 !important;
+    text-align: center;
+    order: 2;
+    padding: 2rem;
+  }
+
+  .hero-title {
+    font-size: 3rem !important;
+  }
+
+  .hero-image-container {
+    height: 400px !important;
+    order: 1;
+    width: 100%;
+  }
+
+  /* Grid Reset for Mobile */
+  .grid-2-cols, .grid-3-cols, .admin-dashboard-grid, .status-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  /* Admin & Order Row Transformations */
+  .admin-table-header {
+    display: none !important;
+  }
+
+  .admin-row, .admin-registry-row, .admin-product-row, .orders-row {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+    padding: 2rem !important;
+    display: grid !important;
+  }
+
+  .admin-row > span, .admin-row > div,
+  .admin-registry-row > span, .admin-registry-row > div,
+  .admin-product-row > span, .admin-product-row > div,
+  .orders-row > span, .orders-row > div {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    text-align: left !important;
+  }
+
+  .admin-row > span::before, .admin-row > div::before,
+  .admin-registry-row > span::before, .admin-registry-row > div::before,
+  .admin-product-row > span::before, .admin-product-row > div::before,
+  .orders-row > span::before, .orders-row > div::before {
+    content: attr(data-label);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-grey-medium);
+    font-weight: 600;
+  }
+
+  /* Shop page adjustments */
+  .shop-filters {
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+    align-items: flex-start !important;
+  }
+  
+  .shop-search {
+    width: 100% !important;
+  }
+
+  /* Product Details adjustments */
+  .product-details-grid {
+    grid-template-columns: 1fr !important;
+    gap: 3rem !important;
+  }
+  
+  .product-image-large {
+    height: 500px !important;
+  }
+
+  .profile-container, .auth-container {
+    padding: 4rem 1rem !important;
+  }
+
+  .not-found-title {
+    font-size: 2.5rem !important;
+  }
 }

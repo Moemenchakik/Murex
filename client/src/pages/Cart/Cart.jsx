@@ -43,7 +43,7 @@ function Cart() {
           <Link to="/shop" className="btn-luxury">Explore Collection</Link>
         </div>
       ) : (
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 350px", gap: "4rem", alignItems: "start" }}>
+        <div className="grid-2-cols" style={{ alignItems: "start" }}>
           {/* Cart Items List */}
           <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
             <div style={{ 

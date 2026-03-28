@@ -127,12 +127,13 @@ function ProductDetails() {
         </div>
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "5rem", marginBottom: "8rem" }}>
+      <div className="product-details-grid grid-2-cols" style={{ marginBottom: "8rem" }}>
         {/* Image Gallery */}
         <div style={{ position: "relative" }}>
           <img 
             src={getImagePath(product.images[0])} 
             alt={product.name} 
+            className="product-image-large"
             style={{ width: "100%", height: "800px", objectFit: "cover", background: "var(--color-grey-light)" }}
           />
         </div>

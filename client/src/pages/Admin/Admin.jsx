@@ -40,7 +40,7 @@ function Admin() {
         <h1 style={{ fontSize: "3.5rem", marginTop: "1rem" }}>Dashboard</h1>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2.5rem" }}>
+      <div className="admin-dashboard-grid">
         {adminModules.map((module, index) => (
           <div 
             key={index}

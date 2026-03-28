@@ -36,9 +36,7 @@ function OrderList() {
       {isError && <div style={{ color: "#d00", marginBottom: "2rem" }}>{message}</div>}
 
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-        <div style={{ 
-          display: "grid", 
-          gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 120px", 
+        <div className="admin-table-header admin-registry-row" style={{ 
           padding: "1rem 2rem", 
           fontSize: "0.7rem", 
           textTransform: "uppercase", 
@@ -58,9 +56,8 @@ function OrderList() {
         {orders.map((order) => (
           <div 
             key={order._id} 
+            className="admin-registry-row"
             style={{ 
-              display: "grid", 
-              gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr 1fr 120px", 
               alignItems: "center", 
               padding: "1.5rem 2rem", 
               background: "#fff", 
@@ -70,25 +67,25 @@ function OrderList() {
             onMouseOver={(e) => e.currentTarget.style.borderColor = "var(--color-gold)"}
             onMouseOut={(e) => e.currentTarget.style.borderColor = "#f4f4f4"}
           >
-            <span style={{ fontWeight: "700", fontSize: "0.85rem" }}>#{order._id.substring(order._id.length-8).toUpperCase()}</span>
-            <span style={{ fontSize: "0.9rem" }}>{order.user && order.user.name}</span>
-            <span style={{ fontSize: "0.85rem", color: "var(--color-grey-dark)" }}>{new Date(order.createdAt).toLocaleDateString()}</span>
-            <span style={{ fontWeight: "600" }}>${order.totalPrice.toLocaleString()}</span>
-            <span>
+            <span data-label="Order Ref" style={{ fontWeight: "700", fontSize: "0.85rem" }}>#{order._id.substring(order._id.length-8).toUpperCase()}</span>
+            <span data-label="Client" style={{ fontSize: "0.9rem" }}>{order.user && order.user.name}</span>
+            <span data-label="Date" style={{ fontSize: "0.85rem", color: "var(--color-grey-dark)" }}>{new Date(order.createdAt).toLocaleDateString()}</span>
+            <span data-label="Investment" style={{ fontWeight: "600" }}>${order.totalPrice.toLocaleString()}</span>
+            <span data-label="Payment">
               {order.isPaid ? (
                 <span style={{ color: "#2e7d32", fontSize: "0.75rem", fontWeight: "700", textTransform: "uppercase" }}>Settled</span>
               ) : (
                 <span style={{ color: "#d00", fontSize: "0.75rem", fontWeight: "700", textTransform: "uppercase" }}>Pending</span>
               )}
             </span>
-            <span>
+            <span data-label="Status">
               {order.isDelivered ? (
                 <span style={{ color: "#2e7d32", fontSize: "0.75rem", fontWeight: "700", textTransform: "uppercase" }}>Arrived</span>
               ) : (
                 <span style={{ color: "var(--color-gold)", fontSize: "0.75rem", fontWeight: "700", textTransform: "uppercase" }}>In Transit</span>
               )}
             </span>
-            <div style={{ textAlign: "right" }}>
+            <div data-label="Action" style={{ textAlign: "right" }}>
               <Link 
                 to={`/orders/${order._id}`}
                 style={{ fontSize: "0.75rem", textTransform: "uppercase", fontWeight: "700", borderBottom: "1px solid #000" }}

@@ -110,6 +110,12 @@ function ProductEdit() {
     }
   };
 
+  const getImagePath = (image) => {
+    if (!image) return "https://via.placeholder.com/200";
+    if (image.startsWith("http") || image.startsWith("data:")) return image;
+    return image.startsWith("/") ? image : `/${image}`;
+  };
+
   if (isLoading) return <div className="container" style={{ padding: "10rem", textAlign: "center" }}><p className="hero-subtitle">Processing...</p></div>;
 
   return (
@@ -125,7 +131,7 @@ function ProductEdit() {
       
       {isError && <div style={{ color: "#d00", marginBottom: "2rem", padding: "1rem", background: "#fee", borderLeft: "4px solid #d00" }}>{message}</div>}
 
-      <form onSubmit={submitHandler} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
+      <form onSubmit={submitHandler} className="grid-2-cols" style={{ gap: "2rem" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           <div>
             <label style={{ display: "block", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "0.5rem" }}>Name</label>
@@ -185,7 +191,7 @@ function ProductEdit() {
               {formData.images.length === 0 && <span style={{ fontSize: "0.8rem", color: "#999" }}>No images uploaded yet.</span>}
               {formData.images.map((img, index) => (
                 <div key={index} style={{ position: "relative" }}>
-                  <img src={img.startsWith("http") ? img : `${API_BASE_URL}${img}`} alt="Product" style={{ width: "70px", height: "90px", objectFit: "cover" }} />
+                  <img src={getImagePath(img)} alt="Product" style={{ width: "70px", height: "90px", objectFit: "cover" }} />
                   <button 
                     type="button"
                     onClick={() => setFormData({ ...formData, images: formData.images.filter((_, i) => i !== index) })}

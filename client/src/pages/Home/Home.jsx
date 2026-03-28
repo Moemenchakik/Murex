@@ -4,7 +4,7 @@ function Home() {
   return (
     <main>
       <section className="hero">
-        <div className="container" style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+        <div className="container" style={{ display: 'flex', alignItems: 'center', height: '100%', flexWrap: 'wrap' }}>
           <div className="hero-content">
             <span className="hero-subtitle">Exclusive Collection 2026</span>
             <h1 className="hero-title">Timeless <br /> Elegance.</h1>
@@ -13,7 +13,7 @@ function Home() {
               meticulously designed for the modern individual who values 
               quality and sophisticated style.
             </p>
-            <div style={{ display: 'flex', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'inherit' }}>
               <Link to="/shop" className="btn-luxury">Shop Collection</Link>
               <Link to="/shop" className="btn-outline">New Arrivals</Link>
             </div>
@@ -28,13 +28,13 @@ function Home() {
         </div>
       </section>
 
-      <section className="container">
+      <section className="container" style={{ paddingBottom: '5rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
           <span className="hero-subtitle">Curated For You</span>
           <h2 style={{ fontSize: '2.5rem' }}>Luxury Essentials</h2>
         </div>
         
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem' }}>
+        <div className="grid-3-cols">
           {/* Static placeholders for visual impact since DB is not connected */}
           <div className="product-card-luxury">
             <div className="product-image-wrapper">

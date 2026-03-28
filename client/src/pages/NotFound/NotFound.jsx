@@ -11,7 +11,7 @@ function NotFound() {
       textAlign: "center"
     }}>
       <span className="hero-subtitle">Error 404</span>
-      <h1 style={{ fontSize: "4rem", margin: "1.5rem 0" }}>Page Not Located.</h1>
+      <h1 className="not-found-title" style={{ fontSize: "4rem", margin: "1.5rem 0" }}>Page Not Located.</h1>
       <p style={{ 
         maxWidth: "500px", 
         color: "var(--color-grey-medium)", 

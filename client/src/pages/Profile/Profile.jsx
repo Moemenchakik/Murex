@@ -41,7 +41,7 @@ function Profile() {
   };
 
   return (
-    <div className="container" style={{ maxWidth: "600px", padding: "5rem 2rem" }}>
+    <div className="container profile-container" style={{ maxWidth: "600px", padding: "5rem 2rem" }}>
       <div style={{ textAlign: "center", marginBottom: "3rem" }}>
         <span className="hero-subtitle">Your Account</span>
         <h1 style={{ fontSize: "2.5rem", marginTop: "1rem" }}>Profile Settings</h1>

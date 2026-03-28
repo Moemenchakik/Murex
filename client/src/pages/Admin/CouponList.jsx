@@ -96,7 +96,7 @@ function CouponList() {
         <h1 style={{ fontSize: "2.5rem", marginTop: "1rem" }}>Promotional Management</h1>
       </div>
       
-      <div style={{ display: "grid", gridTemplateColumns: "400px 1fr", gap: "5rem" }}>
+      <div className="grid-2-cols">
         {/* Create Coupon Form */}
         <div>
           <h3 style={{ fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.2em", marginBottom: "2rem", borderBottom: "1px solid #eee", paddingBottom: "1rem" }}>

@@ -56,9 +56,7 @@ function ProductList() {
 
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         {/* Table Header */}
-        <div style={{ 
-          display: "grid", 
-          gridTemplateColumns: "80px 1.5fr 1fr 1fr 1fr 120px", 
+        <div className="admin-table-header admin-product-row" style={{ 
           padding: "1rem 2rem", 
           fontSize: "0.7rem", 
           textTransform: "uppercase", 
@@ -76,9 +74,7 @@ function ProductList() {
 
         {/* Product Rows */}
         {products.map((product) => (
-          <div key={product._id} style={{ 
-            display: "grid", 
-            gridTemplateColumns: "80px 1.5fr 1fr 1fr 1fr 120px", 
+          <div key={product._id} className="admin-product-row" style={{ 
             alignItems: "center", 
             padding: "1.5rem 2rem", 
             background: "#fff", 
@@ -88,18 +84,18 @@ function ProductList() {
           onMouseOver={(e) => e.currentTarget.style.borderColor = "var(--color-gold)"}
           onMouseOut={(e) => e.currentTarget.style.borderColor = "#f4f4f4"}
           >
-            <img src={getImagePath(product.images[0])} alt="" style={{ width: "50px", height: "65px", objectFit: "cover", background: "#f9f9f9" }} />
-            <span style={{ fontWeight: "600", fontSize: "0.95rem" }}>{product.name}</span>
-            <span style={{ fontSize: "0.85rem", color: "var(--color-grey-dark)" }}>{product.category}</span>
-            <span style={{ fontWeight: "700" }}>${product.price.toLocaleString()}</span>
-            <span style={{ 
+            <span data-label="Image"><img src={getImagePath(product.images[0])} alt="" style={{ width: "50px", height: "65px", objectFit: "cover", background: "#f9f9f9" }} /></span>
+            <span data-label="Piece Name" style={{ fontWeight: "600", fontSize: "0.95rem" }}>{product.name}</span>
+            <span data-label="Category" style={{ fontSize: "0.85rem", color: "var(--color-grey-dark)" }}>{product.category}</span>
+            <span data-label="Price" style={{ fontWeight: "700" }}>${product.price.toLocaleString()}</span>
+            <span data-label="Stock" style={{ 
               fontSize: "0.85rem", 
               color: product.stock < 5 ? "#d00" : "var(--color-grey-dark)",
               fontWeight: product.stock < 5 ? "700" : "400"
             }}>
               {product.stock} Units
             </span>
-            <div style={{ display: "flex", gap: "1.5rem", justifyContent: "flex-end" }}>
+            <div data-label="Actions" style={{ display: "flex", gap: "1.5rem", justifyContent: "flex-end" }}>
               <Link to={`/admin/product/${product._id}/edit`} style={{ fontSize: "0.75rem", textTransform: "uppercase", fontWeight: "700", borderBottom: "1px solid #000" }}>Edit</Link>
               <button onClick={() => deleteHandler(product._id)} style={{ fontSize: "0.75rem", textTransform: "uppercase", fontWeight: "700", color: "#d00" }}>Remove</button>
             </div>

@@ -107,7 +107,7 @@ function Checkout() {
         </div>
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 400px", gap: "5rem" }}>
+      <div className="grid-2-cols">
         {/* Left Side: Shipping & Payment */}
         <div>
           <form onSubmit={handleSubmit}>

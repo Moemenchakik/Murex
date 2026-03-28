@@ -42,10 +42,10 @@ function OrderDetails() {
         <p style={{ color: "var(--color-grey-medium)", marginTop: "0.5rem" }}>Placed on {new Date(order.createdAt).toLocaleDateString('en-US', { dateStyle: 'full' })}</p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 400px", gap: "5rem" }}>
+      <div className="grid-2-cols">
         <div style={{ display: "flex", flexDirection: "column", gap: "3rem" }}>
           {/* Status Cards */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem" }}>
+          <div className="status-grid">
             <div style={{ padding: "2rem", background: order.isPaid ? "var(--color-cream)" : "#fffaf0", border: "1px solid #eee" }}>
               <h4 style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: "1rem" }}>Payment Status</h4>
               <p style={{ fontSize: "1.1rem", fontWeight: "700" }}>{order.isPaid ? "Paid in Full" : "Awaiting Settlement"}</p>

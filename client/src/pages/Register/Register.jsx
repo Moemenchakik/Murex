@@ -47,7 +47,7 @@ function Register() {
   };
 
   return (
-    <div className="container" style={{ maxWidth: "500px", padding: "8rem 2rem", margin: "0 auto" }}>
+    <div className="container auth-container" style={{ maxWidth: "500px", padding: "8rem 2rem", margin: "0 auto" }}>
       <div style={{ textAlign: "center", marginBottom: "3rem" }}>
         <span className="hero-subtitle">Join the Club</span>
         <h1 style={{ fontSize: "2.5rem", marginTop: "1rem" }}>Create Account</h1>
