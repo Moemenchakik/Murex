@@ -49,7 +49,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
   // Update product stock
   for (const item of orderItems) {
     await Product.findByIdAndUpdate(item.productId, {
-      $inc: { stock: -item.qty },
+      $inc: { stock: -item.quantity },
     });
   }
 
